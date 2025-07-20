@@ -1,5 +1,5 @@
 name: "Podcast Generator"
-author: "SSS Soham"
+author: "sss-soham"
 description: "Generates a feed for a podcast from a YAML file"
 runs:
   using: "docker"
