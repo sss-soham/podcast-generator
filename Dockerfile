@@ -4,6 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     python3.10 \
+    python3.10-venv \
+    python3.10-distutils \
     curl \
     git
 
