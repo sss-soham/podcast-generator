@@ -1,24 +1,26 @@
 FROM ubuntu:latest
 
-# Update & install Python + pip
+# Set noninteractive frontend to avoid prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update and install dependencies
 RUN apt-get update && apt-get install -y \
     python3.10 \
+    python3.10-venv \
     python3-pip \
     git
 
-# Link python3.10 and pip3 explicitly to python and pip
-RUN ln -sf /usr/bin/python3.10 /usr/bin/python && \
-    ln -sf /usr/bin/pip3 /usr/bin/pip
+# Ensure pip works properly despite Debian PEP 668 protection
+RUN python3.10 -m ensurepip && \
+    python3.10 -m pip install --upgrade pip && \
+    python3.10 -m pip install PyYAML
 
-# Install PyYAML
-RUN pip install --upgrade pip && pip install PyYAML
-
-# Copy files into image
+# Copy your script files
 COPY feed.py /usr/bin/feed.py
 COPY entrypoint.sh /entrypoint.sh
 
-# Make sure entrypoint.sh is executable
+# Make entrypoint executable
 RUN chmod +x /entrypoint.sh
 
-# Entry point
+# Entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
