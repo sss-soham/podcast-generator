@@ -1,22 +1,24 @@
 FROM ubuntu:latest
 
-# Install Python and Git
+# Update & install Python + pip
 RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-pip \
-    git && \
-    ln -sf /usr/bin/python3.10 /usr/bin/python3 && \
+    git
+
+# Link python3.10 and pip3 explicitly to python and pip
+RUN ln -sf /usr/bin/python3.10 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-# Install Python dependencies
-RUN pip install PyYAML
+# Install PyYAML
+RUN pip install --upgrade pip && pip install PyYAML
 
-# Copy script files
-COPY feed.py /usr/local/bin/feed.py
+# Copy files into image
+COPY feed.py /usr/bin/feed.py
 COPY entrypoint.sh /entrypoint.sh
 
-# Make entrypoint executable
+# Make sure entrypoint.sh is executable
 RUN chmod +x /entrypoint.sh
 
-# Set entrypoint
+# Entry point
 ENTRYPOINT ["/entrypoint.sh"]
